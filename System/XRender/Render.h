@@ -1180,7 +1180,6 @@ protected:
 		ERR_DEVICE = 1,
 		ERR_INIT = 2,
 		ERR_SHADERS30 = 4,
-		ERR_D3DX = 5,
 
 		ERR_FORCE_DWORD = 0x7fffffff
 	};

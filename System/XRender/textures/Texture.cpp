@@ -1,5 +1,6 @@
 #include "Texture.h"
 #include "..\Render.h"
+#include "DDSTextureLoader9.h"
 
 CDX8Texture::CDX8Texture() : Resource(DX8TYPE_TEXTURE, 0)
 {
@@ -334,9 +335,11 @@ bool CDX8Texture::CreateUseD3DX (const char* fileName)
 	string res;
 	pFS->BuildPath(fileName, res);
 
+	// Convert ANSI path to wide char for DDSTextureLoader9
+	wchar_t wres[1024];
+	MultiByteToWideChar(CP_ACP, 0, res.c_str(), -1, wres, 1024);
 
-
-	HRESULT hr = D3DXCreateTextureFromFileA(NGRender::pRS->D3D(), res.c_str(), (IDirect3DTexture9**)&internalSystemData_IDirect3DBaseTexture9);
+	HRESULT hr = DirectX::CreateDDSTextureFromFile(NGRender::pRS->D3D(), wres, (IDirect3DTexture9**)&internalSystemData_IDirect3DBaseTexture9);
 
 	if (hr != D3D_OK) return false;
 

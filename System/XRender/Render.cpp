@@ -1012,25 +1012,6 @@ static LONG WINAPI DelayLoadDllExceptionFilter(PEXCEPTION_POINTERS pep, int& err
 	}
 }
 
-static bool TryInitD3DX()
-{
-	int errorCode = 0;
-	bool bRet = true;
-	__try
-	{
-		// Do a simple matrix multiply
-		D3DXMATRIXA16 m1, m2, m3;
-		memset(&m1, 0, sizeof(m1));
-		memset(&m2, 0, sizeof(m2));
-		D3DXMatrixMultiply(&m3, &m1, &m2);
-	}
-	__except (DelayLoadDllExceptionFilter(GetExceptionInformation(), errorCode))
-	{
-		bRet = false;
-	}
-
-	return bRet;
-}
 #endif
 
 
@@ -1064,18 +1045,7 @@ bool NGRender::Init()
 	pD3D = NULL;
 
 
-	int errorCode = 0;
-
 #ifndef _XBOX
-	if (TryInitD3DX() == false)
-	{
-		//bRet = false;
-		MakeError(ERR_D3DX);
-
-		RELEASE(pak);
-		RELEASE(mirror);
-		return false;
-	}
 #endif
 
 
@@ -3863,6 +3833,199 @@ bool NGRender::SetUseMipFillColor(bool bNewUseMipFillColor)
 }
 
 
+// DDS structures and constants (DDS format is a well-known standard, no external dependency needed)
+#pragma pack(push,1)
+
+typedef struct
+{
+    DWORD dwSize;
+    DWORD dwFlags;
+    DWORD dwFourCC;
+    DWORD dwRGBBitCount;
+    DWORD dwRBitMask;
+    DWORD dwGBitMask;
+    DWORD dwBBitMask;
+    DWORD dwABitMask;
+} DDS_PIXELFORMAT;
+
+typedef struct
+{
+    DWORD           dwSize;
+    DWORD           dwFlags;
+    DWORD           dwHeight;
+    DWORD           dwWidth;
+    DWORD           dwPitchOrLinearSize;
+    DWORD           dwDepth;
+    DWORD           dwMipMapCount;
+    DWORD           dwReserved1[11];
+    DDS_PIXELFORMAT ddspf;
+    DWORD           dwCaps1;
+    DWORD           dwCaps2;
+    DWORD           dwCaps3;
+    DWORD           dwCaps4;
+    DWORD           dwReserved2;
+} DDS_HEADER;
+
+#pragma pack(pop)
+
+#define DDSD_CAPS        0x00000001
+#define DDSD_HEIGHT      0x00000002
+#define DDSD_WIDTH       0x00000004
+#define DDSD_PITCH       0x00000008
+#define DDSD_PIXELFORMAT 0x00001000
+#define DDSD_MIPMAPCOUNT 0x00020000
+#define DDSD_LINEARSIZE  0x00080000
+#define DDSD_DEPTH       0x00800000
+
+#define DDS_FOURCC       0x00000004
+#define DDS_RGB          0x00000040
+#define DDS_RGBA         0x00000041
+#define DDS_ALPHA        0x00000002
+#define DDS_LUMINANCE    0x00020000
+
+#define DDS_CAPS_TEXTURE 0x00001000
+
+// Simple DDS file writer using D3D9 API (replaces D3DXSaveTextureToFile)
+static bool SaveTextureToDDSFile(IDirect3DBaseTexture9* pBaseTexture, const char* pFileName)
+{
+	IDirect3DTexture9* pTex = (IDirect3DTexture9*)pBaseTexture;
+	if (!pTex) return false;
+
+	D3DSURFACE_DESC desc;
+	if (FAILED(pTex->GetLevelDesc(0, &desc))) return false;
+
+	// Open file
+	FILE* f = nullptr;
+	fopen_s(&f, pFileName, "wb");
+	if (!f) return false;
+
+	// Write DDS header
+	DWORD dwMagic = MAKEFOURCC('D', 'D', 'S', ' ');
+	fwrite(&dwMagic, sizeof(dwMagic), 1, f);
+
+	DDS_HEADER header;
+	memset(&header, 0, sizeof(header));
+	header.dwSize = sizeof(DDS_HEADER);
+	header.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT | DDSD_LINEARSIZE;
+	header.dwHeight = desc.Height;
+	header.dwWidth = desc.Width;
+
+	// Determine format and calculate pitch
+	bool bCompressed = false;
+	switch (desc.Format)
+	{
+	case D3DFMT_DXT1:
+		header.ddspf.dwSize = sizeof(DDS_PIXELFORMAT);
+		header.ddspf.dwFlags = DDS_FOURCC;
+		header.ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '1');
+		header.dwPitchOrLinearSize = max(1, (desc.Width + 3) / 4) * 8;
+		bCompressed = true;
+		break;
+	case D3DFMT_DXT2:
+	case D3DFMT_DXT3:
+		header.ddspf.dwSize = sizeof(DDS_PIXELFORMAT);
+		header.ddspf.dwFlags = DDS_FOURCC;
+		header.ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '3');
+		header.dwPitchOrLinearSize = max(1, (desc.Width + 3) / 4) * 16;
+		bCompressed = true;
+		break;
+	case D3DFMT_DXT4:
+	case D3DFMT_DXT5:
+		header.ddspf.dwSize = sizeof(DDS_PIXELFORMAT);
+		header.ddspf.dwFlags = DDS_FOURCC;
+		header.ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '5');
+		header.dwPitchOrLinearSize = max(1, (desc.Width + 3) / 4) * 16;
+		bCompressed = true;
+		break;
+	case D3DFMT_A8R8G8B8:
+	case D3DFMT_X8R8G8B8:
+		header.ddspf.dwSize = sizeof(DDS_PIXELFORMAT);
+		header.ddspf.dwFlags = DDS_RGB | DDS_ALPHA;
+		header.ddspf.dwRGBBitCount = 32;
+		header.ddspf.dwRBitMask = 0x00FF0000;
+		header.ddspf.dwGBitMask = 0x0000FF00;
+		header.ddspf.dwBBitMask = 0x000000FF;
+		header.ddspf.dwABitMask = 0xFF000000;
+		header.dwPitchOrLinearSize = desc.Width * 4;
+		break;
+	case D3DFMT_A8:
+		header.ddspf.dwSize = sizeof(DDS_PIXELFORMAT);
+		header.ddspf.dwFlags = DDS_ALPHA;
+		header.ddspf.dwRGBBitCount = 8;
+		header.ddspf.dwABitMask = 0xFF;
+		header.dwPitchOrLinearSize = desc.Width;
+		break;
+	case D3DFMT_L8:
+		header.ddspf.dwSize = sizeof(DDS_PIXELFORMAT);
+		header.ddspf.dwFlags = DDS_LUMINANCE;
+		header.ddspf.dwRGBBitCount = 8;
+		header.ddspf.dwRBitMask = 0xFF;
+		header.dwPitchOrLinearSize = desc.Width;
+		break;
+	case D3DFMT_A8L8:
+		header.ddspf.dwSize = sizeof(DDS_PIXELFORMAT);
+		header.ddspf.dwFlags = DDS_LUMINANCE | DDS_ALPHA;
+		header.ddspf.dwRGBBitCount = 16;
+		header.ddspf.dwRBitMask = 0xFF;
+		header.ddspf.dwABitMask = 0xFF00;
+		header.dwPitchOrLinearSize = desc.Width * 2;
+		break;
+	default:
+		// Uncompressed RGBA default
+		header.ddspf.dwSize = sizeof(DDS_PIXELFORMAT);
+		header.ddspf.dwFlags = DDS_RGB | DDS_ALPHA;
+		header.ddspf.dwRGBBitCount = 32;
+		header.ddspf.dwRBitMask = 0x00FF0000;
+		header.ddspf.dwGBitMask = 0x0000FF00;
+		header.ddspf.dwBBitMask = 0x000000FF;
+		header.ddspf.dwABitMask = 0xFF000000;
+		header.dwPitchOrLinearSize = desc.Width * 4;
+		break;
+	}
+
+	header.dwCaps1 = DDS_CAPS_TEXTURE;
+	header.dwMipMapCount = 1;
+
+	fwrite(&header, sizeof(header), 1, f);
+
+	// Write texture data
+	if (bCompressed)
+	{
+		// For compressed formats, lock and write each mip level
+		for (DWORD level = 0; level < pTex->GetLevelCount(); level++)
+		{
+			D3DLOCKED_RECT lockedRect;
+			if (SUCCEEDED(pTex->LockRect(level, &lockedRect, NULL, D3DLOCK_READONLY)))
+			{
+				D3DSURFACE_DESC levelDesc;
+				pTex->GetLevelDesc(level, &levelDesc);
+				DWORD dataSize = max(1, (levelDesc.Width + 3) / 4) * max(1, (levelDesc.Height + 3) / 4) *
+					(desc.Format == D3DFMT_DXT1 ? 8 : 16);
+				fwrite(lockedRect.pBits, dataSize, 1, f);
+				pTex->UnlockRect(level);
+			}
+		}
+	}
+	else
+	{
+		// For uncompressed formats
+		D3DLOCKED_RECT lockedRect;
+		if (SUCCEEDED(pTex->LockRect(0, &lockedRect, NULL, D3DLOCK_READONLY)))
+		{
+			DWORD pitch = lockedRect.Pitch;
+			BYTE* src = (BYTE*)lockedRect.pBits;
+			for (DWORD y = 0; y < desc.Height; y++)
+			{
+				fwrite(src + y * pitch, header.dwPitchOrLinearSize, 1, f);
+			}
+			pTex->UnlockRect(0);
+		}
+	}
+
+	fclose(f);
+	return true;
+}
+
 bool NGRender::SaveTexture2File(IBaseTexture * pTexture, const char * pFileName)
 {
 	AssertCoreThread;
@@ -3874,8 +4037,7 @@ bool NGRender::SaveTexture2File(IBaseTexture * pTexture, const char * pFileName)
 	if (!pTexture || !pFileName || !pFileName[0]) return false;
 	if (pTexture->GetType() == DX8TYPE_TEXTURE)
 	{
-		D3DXSaveTextureToFileA(pFileName, D3DXIFF_DDS, (LPDIRECT3DBASETEXTURE9)((CDX8Texture*)pTexture)->GetBaseTexture(), null);
-		return true;
+		return SaveTextureToDDSFile((LPDIRECT3DBASETEXTURE9)((CDX8Texture*)pTexture)->GetBaseTexture(), pFileName);
 	}
 
 
@@ -7544,30 +7706,12 @@ void NGRender::MakeError (ErrorID id)
 				errorDesc->Release();
 				return;
 			} else
-			{
-				if (id == ERR_SHADERS30)
 				{
-					if (pLocStr)
-					{
-						const char* val = pLocStr->GetString(1000103);
-						if (val != NULL)
-						{
-							errorDesc->Set(val);
-							errorDesc->Release();
-							return;
-						}
-					}
-
-					errorDesc->Set("Device not support shader model 3.0 !");
-					errorDesc->Release();
-					return;
-				} else
-				{
-					if (id == ERR_D3DX)
+					if (id == ERR_SHADERS30)
 					{
 						if (pLocStr)
 						{
-							const char* val = pLocStr->GetString(1000104);
+							const char* val = pLocStr->GetString(1000103);
 							if (val != NULL)
 							{
 								errorDesc->Set(val);
@@ -7575,13 +7719,12 @@ void NGRender::MakeError (ErrorID id)
 								return;
 							}
 						}
-
-						errorDesc->Set("Required D3DX not found !! Please update your DirectX to latest version !");
+	
+						errorDesc->Set("Device not support shader model 3.0 !");
 						errorDesc->Release();
 						return;
 					}
 				}
-			}
 		}
 	}
 
