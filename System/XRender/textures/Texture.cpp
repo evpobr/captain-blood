@@ -504,7 +504,8 @@ void CDX8Texture::CreateFromGPUTexture (D3DTexture * pBaseTexture, BYTE* pTextur
 
 void CDX8Texture::OnResetDevice()
 {
-	if (!initParams.bRenderTarget) return;
+	// System memory textures don't need recreation on device reset
+	if (BaseTexture.Pool == D3DPOOL_SYSTEMMEM) return;
 
 	if (initParams.bLinear)
 	{
@@ -518,11 +519,10 @@ void CDX8Texture::OnResetDevice()
 
 void CDX8Texture::OnLostDevice()
 {
-	if (initParams.bRenderTarget)
-	{
-		IDirect3DBaseTexture9 * tempTexPtr = (IDirect3DBaseTexture9*)internalSystemData_IDirect3DBaseTexture9;
-		RELEASE(tempTexPtr);
-		internalSystemData_IDirect3DBaseTexture9 = NULL;
-	}
+	// System memory textures don't need release on device loss
+	if (BaseTexture.Pool == D3DPOOL_SYSTEMMEM) return;
 
+	IDirect3DBaseTexture9 * tempTexPtr = (IDirect3DBaseTexture9*)internalSystemData_IDirect3DBaseTexture9;
+	RELEASE(tempTexPtr);
+	internalSystemData_IDirect3DBaseTexture9 = NULL;
 }

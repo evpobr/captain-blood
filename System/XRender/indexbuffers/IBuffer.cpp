@@ -69,10 +69,10 @@ bool CDX8IBuffer::Create(dword _Length, dword _Usage, RENDERFORMAT _Format, REND
 
 		//FIXME, убрать это дерьмо и попарвить весь код
 #ifndef _XBOX
-	if (_Pool == POOL_MANAGED) 
+	if (_Pool == POOL_DEFAULT)
 	{
-		_Usage &= ~USAGE_DYNAMIC;
-		_Usage &= ~USAGE_WRITEONLY;
+		_Usage |= USAGE_WRITEONLY;
+		_Usage |= USAGE_DYNAMIC;
 	}
 #else
 	_Usage &= ~USAGE_DYNAMIC;

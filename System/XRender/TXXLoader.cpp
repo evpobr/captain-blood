@@ -207,7 +207,7 @@ CDX8Texture* TXXLoader::LoadTexture(IDataFile* file, const TxxFileHeader& _head,
 	int savedWidth = head.width;
 	int savedHeight = head.height;
 
-	pDX8Texture = (CDX8Texture *)pRS->CreateTexture(head.width, head.height, head.num_mips, (bRenderTarget) ? USAGE_RENDERTARGET : 0, FormatFromDX (texFormat.d3dFormat), null, -1, (bRenderTarget) ? POOL_DEFAULT : POOL_MANAGED);
+	pDX8Texture = (CDX8Texture *)pRS->CreateTexture(head.width, head.height, head.num_mips, (bRenderTarget) ? USAGE_RENDERTARGET : 0, FormatFromDX (texFormat.d3dFormat), null, -1, POOL_DEFAULT);
 	if (!pDX8Texture) return null;
 	pLockTexture = pDX8Texture;
 
@@ -349,7 +349,7 @@ bool TXXLoader::LoadSurface(IDataFile * pRF, IBaseTexture * pTexture, dword dwFa
 
 CDX8Texture* TXXLoader::CreateMipMapColoredTexture(TxxFileHeader TXHead, const SD_TEXFORMAT & TexFormat)
 {
-	CDX8Texture * pDX8Texture = (CDX8Texture *)pRS->CreateTexture(TXHead.width, TXHead.height, TXHead.num_mips, 0, FMT_DXT1, null, -1, POOL_MANAGED);
+	CDX8Texture * pDX8Texture = (CDX8Texture *)pRS->CreateTexture(TXHead.width, TXHead.height, TXHead.num_mips, 0, FMT_DXT1, null, -1, POOL_DEFAULT);
 	if (!pDX8Texture) return null;
 
 	/*

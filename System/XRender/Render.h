@@ -1,7 +1,7 @@
 #ifndef STORM3_NEXTGEN_RENDER_HEADER
 #define STORM3_NEXTGEN_RENDER_HEADER
 
-
+#include "OSVersion.h"
 
 #include "..\..\common_h\Render.h"
 #include "..\..\common_h\IConsole.h"
@@ -83,6 +83,9 @@ struct TStateHack
 
 class NGRender : public IRender
 {
+public:
+	static bool m_bUseDefaultPool;  // true on Vista+ (WDDM), false on XP (XDDM)
+
 protected:
 
 #ifdef RENDER_DEBUG_DRAW_SKIP
@@ -251,14 +254,14 @@ public:
 	virtual const RENDERSCREEN& GetScreenInfo3D() const;
 
 	// Vertex/Index buffers section
-	virtual IVBuffer* CreateVertexBuffer(dword Length, dword Stride, const char * pFileName, long iLine, dword Usage = USAGE_WRITEONLY, RENDERPOOL Pool = POOL_MANAGED);
-	virtual IIBuffer* CreateIndexBuffer(dword Length, const char * pFileName, long iLine, dword Usage = USAGE_WRITEONLY, RENDERFORMAT Format = FMT_INDEX16, RENDERPOOL Pool = POOL_MANAGED);
+	virtual IVBuffer* CreateVertexBuffer(dword Length, dword Stride, const char * pFileName, long iLine, dword Usage = USAGE_WRITEONLY, RENDERPOOL Pool = POOL_DEFAULT);
+	virtual IIBuffer* CreateIndexBuffer(dword Length, const char * pFileName, long iLine, dword Usage = USAGE_WRITEONLY, RENDERFORMAT Format = FMT_INDEX16, RENDERPOOL Pool = POOL_DEFAULT);
 
 	// Textures section
 	virtual IBaseTexture* _cdecl CreateTexture(const char * pFileName, long iLine, const char * pFormat, ...);
 	virtual IBaseTexture * _cdecl	CreateTextureFullQuality(const char * pFileName, long iLine, const char * pFormat, ...);
 	virtual IBaseTexture* _cdecl CreateTextureUseD3DX(const char * pFileName, long iLine, const char * pFormat, ...);
-	virtual ITexture* CreateTexture(dword Width, dword Height, dword Levels, dword Usage, RENDERFORMAT Format, const char * pFileName, long iLine, RENDERPOOL Pool = POOL_MANAGED);
+	virtual ITexture* CreateTexture(dword Width, dword Height, dword Levels, dword Usage, RENDERFORMAT Format, const char * pFileName, long iLine, RENDERPOOL Pool = POOL_DEFAULT);
 
 
 	virtual IRenderTarget*				CreateRenderTarget(dword Width, dword Height, const char * pFileName, long iLine, RENDERFORMAT Format, RENDERMULTISAMPLE_TYPE MultiSample = MULTISAMPLE_NONE, long MipLevelsCount = 1);

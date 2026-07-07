@@ -82,6 +82,7 @@ CREATE_SERVICE_NAMED("DX9Render", NGRender, 20)
 NGRender* NGRender::pThreadRS = null;
 
 NGRender* NGRender::pRS = null;
+bool NGRender::m_bUseDefaultPool = false;
 IDirect3DDevice9* CDX8IBuffer::pD3D8 = null;
 IDirect3DDevice9* CDX8VBuffer::pD3D8 = null;
 IDirect3DDevice9* CDX8Texture::pD3D8 = null;
@@ -562,7 +563,11 @@ strTexName(_MAX_PATH)
 
 	evtLegalVideosDone = CreateEvent( null, true, false, null );
 
-
+	// Detect OS version for D3D resource pool selection
+	m_bUseDefaultPool = IsVistaOrLater();
+	api->Trace("NGRender: OS %s - using %s pool for D3D resources",
+		m_bUseDefaultPool ? "Vista+" : "XP",
+		m_bUseDefaultPool ? "DEFAULT" : "MANAGED");
 
 	m_pXLiveShower = null;
 }
@@ -2886,6 +2891,12 @@ IVBuffer* NGRender::CreateVertexBuffer(dword Length, dword Stride, const char * 
 {
 	RestoreIfNeed();
 
+	// On XP, force MANAGED pool for backward compatibility (device loss resilience)
+	if (!m_bUseDefaultPool && Pool == POOL_DEFAULT)
+	{
+		Pool = POOL_MANAGED;
+	}
+
 	LockRes(_FL_, resource_creation_sc, "CreateVertexBuffer");
 
 	CDX8VBuffer * pV = NEW CDX8VBuffer();
@@ -2904,6 +2915,12 @@ IVBuffer* NGRender::CreateVertexBuffer(dword Length, dword Stride, const char * 
 IIBuffer* NGRender::CreateIndexBuffer(dword Length, const char * pFileName, long iLine, dword Usage, RENDERFORMAT Format, RENDERPOOL Pool)
 {
 	RestoreIfNeed();
+
+	// On XP, force MANAGED pool for backward compatibility (device loss resilience)
+	if (!m_bUseDefaultPool && Pool == POOL_DEFAULT)
+	{
+		Pool = POOL_MANAGED;
+	}
 
 	LockRes(_FL_, resource_creation_sc, "CreateIndexBuffer");
 
@@ -3113,13 +3130,18 @@ ITexture* NGRender::CreateTexture(dword Width, dword Height, dword Levels, dword
 		return null;
 	}
 
+	// On XP, force MANAGED pool for backward compatibility (device loss resilience)
+	if (!m_bUseDefaultPool && Pool == POOL_DEFAULT)
+	{
+		Pool = POOL_MANAGED;
+	}
 
 	RestoreIfNeed();
 
 	LockRes(_FL_, resource_creation_sc, "CreateTexture");
 
 	CDX8Texture * pTex = NEW CDX8Texture();
-	if (pTex) 
+	if (pTex)
 	{
 		pTex->SetFileLine(pFileName, iLine);
 		if (!pTex->CreateLinear(Width , Height, Levels, Usage, Format, Pool))

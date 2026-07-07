@@ -444,7 +444,7 @@ inline D3DPOOL PoolToDX (RENDERPOOL renderPool)
 		return D3DPOOL_SYSTEMMEM;
 	}
 
-	return D3DPOOL_MANAGED;
+	return D3DPOOL_DEFAULT;
 }
 
 inline RENDERPOOL PoolFromDX (D3DPOOL dxPool)
@@ -459,7 +459,7 @@ inline RENDERPOOL PoolFromDX (D3DPOOL dxPool)
 		return POOL_SYSTEMMEM;
 	}
 
-	return POOL_MANAGED;
+	return POOL_DEFAULT;
 }
 
 
