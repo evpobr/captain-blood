@@ -1,0 +1,325 @@
+project(Systems)
+
+add_library(Systems SHARED
+    AnimationService/Animation.cpp
+    AnimationService/Animation.h
+    AnimationService/AnimationProcedural.cpp
+    AnimationService/AnimationProcedural.h
+    AnimationService/AnimationService.cpp
+    AnimationService/AnimationService.h
+    AnimationService/anxanimation/AnxAnimation.cpp
+    AnimationService/anxanimation/AnxAnimation.h
+    AnimationService/anxanimation/AnxData.cpp
+    AnimationService/anxanimation/AnxData.h
+    AnimationService/anxanimation/AnxFileFormat.h
+    AnimationService/anxanimation/AnxPlayer.cpp
+    AnimationService/anxanimation/AnxPlayer.h
+    AnimationService/IAnxEditorServiceAccess.h
+    Controls/ControlsIniParser.cpp
+    Controls/ControlsIniParser.h
+    Controls/ControlsManager.cpp
+    Controls/ControlsManager.h
+    Controls/ControlsTrigger.cpp
+    Controls/ControlsTrigger.h
+    Controls/device.h
+    Controls/Force.cpp
+    Controls/Force.h
+    Controls/JoystickDevice.cpp
+    Controls/JoystickDevice.h
+    Controls/JoystickManager.cpp
+    Controls/JoystickManager.h
+    Controls/KeyboardDevice.cpp
+    Controls/KeyboardDevice.h
+    Controls/MouseDevice.cpp
+    Controls/MouseDevice.h
+    Controls/pc.cpp
+    Controls/pc.h
+    Controls/utils.cpp
+    Controls/utils.h
+    Controls/XBoxDevice.cpp
+    Controls/XBoxDevice.h
+    Controls/XBoxKeyboard.cpp
+    Controls/XBoxKeyboard.h
+    Core/Core.cpp
+    Core/Core.h
+    Core/CoreBase.h
+    Core/CoreMain.cpp
+    Core/CoreStorage.cpp
+    Core/CoreStorage.h
+    Core/CoreStorageFolder.cpp
+    Core/CoreStorageFolder.h
+    Core/DllManager.cpp
+    Core/DllManager.h
+    Core/ExecutionModule.cpp
+    Core/ExecutionModule.h
+    Core/MemoryManager.cpp
+    Core/MemoryManager.h
+    Core/ObjectsDeclarators.cpp
+    Core/ObjectsDeclarators.h
+    Core/PerformanceCounters.cpp
+    Core/PerformanceCounters.h
+    Core/RegistryKeyAccessor.h
+    FileService/Archivator.cpp
+    FileService/Archivator.h
+    FileService/DataFile.cpp
+    FileService/DataFile.h
+    FileService/File.cpp
+    FileService/File.h
+    FileService/FileService.cpp
+    FileService/FileService.h
+    FileService/FilesTree.cpp
+    FileService/FilesTree.h
+    FileService/Finder.cpp
+    FileService/Finder.h
+    FileService/IniFile.cpp
+    FileService/IniFile.h
+    FileService/IniParser.cpp
+    FileService/IniParser.h
+    FileService/LoadBuffer.cpp
+    FileService/LoadBuffer.h
+    FileService/MirrorPath.cpp
+    FileService/MirrorPath.h
+    FileService/PackFile.cpp
+    FileService/PackFile.h
+    GMXService/blendShapeMixer.cpp
+    GMXService/blendShapeMixer.h
+    GMXService/gmxService.cpp
+    GMXService/gmxService.h
+    GMXService/mesh_data.h
+    GMXService/meshContainer.cpp
+    GMXService/meshContainer.h
+    GMXService/meshInstance.cpp
+    GMXService/meshInstance.h
+    LocStrings/LocStrings.cpp
+    LocStrings/LocStrings.h
+    SoundService/FxBase.cpp
+    SoundService/FxBase.h
+    SoundService/FxPremaster.cpp
+    SoundService/FxPremaster.h
+    SoundService/FxScene.cpp
+    SoundService/FxScene.h
+    SoundService/FxVoice.cpp
+    SoundService/FxVoice.h
+    SoundService/ISoundEditorAccessor.h
+    SoundService/Sound.cpp
+    SoundService/Sound.h
+    SoundService/SoundBankFile.h
+    SoundService/SoundBanks.cpp
+    SoundService/SoundBanks.h
+    SoundService/SoundEditorAccessor.cpp
+    SoundService/SoundEditorAccessor.h
+    SoundService/SoundOff.h
+    SoundService/SoundScene.cpp
+    SoundService/SoundScene.h
+    SoundService/SoundsEngine.cpp
+    SoundService/SoundsEngine.h
+    SoundService/SoundService.cpp
+    SoundService/SoundService.h
+    SoundService/UnitTests/SoundServiceUnitTests.h
+    SoundService/UnitTests/UnitTestWaveSelectors.cpp
+    xboxlive/ILiveManager.h
+    xboxlive/LiveService.cpp
+    xboxlive/LiveService.h
+    xboxlive/marketplace/ContentGUIUpdater.cpp
+    xboxlive/marketplace/ContentGUIUpdater.h
+    xboxlive/marketplace/contentmanager.cpp
+    xboxlive/marketplace/contentmanager.h
+    xboxlive/marketplace/contenttest.cpp
+    xboxlive/marketplace/contenttest.h
+    xboxlive/marketplace/defines.h
+    xboxlive/marketplace/icontent.h
+    xboxlive/marketplace/ILiveService.h
+    xboxlive/marketplace/pc/PCContentEnumerator.cpp
+    xboxlive/marketplace/pc/PCContentEnumerator.h
+    xboxlive/marketplace/pc/PCLiveService.cpp
+    xboxlive/marketplace/pc/PCLiveService.h
+    xboxlive/marketplace/xbox/content.cpp
+    xboxlive/marketplace/xbox/content.h
+    xboxlive/marketplace/xbox/ContentEnumerator.cpp
+    xboxlive/marketplace/xbox/ContentEnumerator.h
+    xboxlive/marketplace/xbox/DownloadEnumerator.cpp
+    xboxlive/marketplace/xbox/DownloadEnumerator.h
+    xboxlive/objects/LiveServiceTrigger.cpp
+    xboxlive/objects/LiveServiceTrigger.h
+    xboxlive/pc/PCLiveManager.cpp
+    xboxlive/pc/PCLiveManager.h
+    xboxlive/pc/pcutils_temp/utils_temp.cpp
+    xboxlive/pc/pcutils_temp/utils_temp.h
+    xboxlive/pc/steam/isteamapps.h
+    xboxlive/pc/steam/isteamclient.h
+    xboxlive/pc/steam/isteamfriends.h
+    xboxlive/pc/steam/isteamgameserver.h
+    xboxlive/pc/steam/isteammasterserverupdater.h
+    xboxlive/pc/steam/isteammatchmaking.h
+    xboxlive/pc/steam/isteamnetworking.h
+    xboxlive/pc/steam/isteamremotestorage.h
+    xboxlive/pc/steam/isteamuser.h
+    xboxlive/pc/steam/isteamuserstats.h
+    xboxlive/pc/steam/isteamutils.h
+    xboxlive/pc/steam/matchmakingtypes.h
+    xboxlive/pc/steam/steam_api.h
+    xboxlive/pc/steam/steam_gameserver.h
+    xboxlive/pc/steam/steamclientpublic.h
+    xboxlive/pc/steam/steamtypes.h
+    xboxlive/pc/steam_wraper.cpp
+    xboxlive/pc/steam_wraper.h
+    xboxlive/xbox/XboxLiveManager.cpp
+    xboxlive/xbox/XboxLiveManager.h
+    XRender/advfont/AdvFont.cpp
+    XRender/advfont/AdvFont.h
+    XRender/advfont/AdvFontsManager.cpp
+    XRender/advfont/AdvFontsManager.h
+    XRender/atomicI32.h
+    XRender/batch/CommandBufferExecutor.cpp
+    XRender/batch/CommandBufferExecutor.h
+    XRender/batch/gpu_structs.h
+    XRender/batch/PrecompiledBatch.cpp
+    XRender/batch/PrecompiledBatch.h
+    XRender/capsule/Capsule.cpp
+    XRender/capsule/Capsule.h
+    XRender/commandbuffers/CommandBufferCompiler.cpp
+    XRender/commandbuffers/CommandBufferCompiler.h
+    XRender/CompilerMode.h
+    XRender/D3D9SyncCode.h
+    XRender/D3DConvertor.h
+    XRender/defaultstates/DefaultStates.cpp
+    XRender/defaultstates/DefaultStates.h
+    XRender/device/IDevice.h
+    XRender/device/PC_Device.cpp
+    XRender/device/PC_Device.h
+    XRender/device/X360_Device.cpp
+    XRender/device/X360_Device.h
+    XRender/Draw.cpp
+    XRender/fonts/CFont.cpp
+    XRender/fonts/Font.cpp
+    XRender/fonts/Font.h
+    XRender/fonts/RFont.cpp
+    XRender/GraphicsApi.h
+    XRender/indexbuffers/IBuffer.cpp
+    XRender/indexbuffers/IBuffer.h
+    XRender/MaxLights.h
+    XRender/mediaplayer/XBoxMediaPlayer.cpp
+    XRender/mediaplayer/XBoxMediaPlayer.h
+    XRender/Query/OcclusionQuery.cpp
+    XRender/Query/OcclusionQuery.h
+    XRender/Render.cpp
+    XRender/Render.h
+    XRender/rendertargets/RenderTarget.cpp
+    XRender/rendertargets/RenderTarget.h
+    XRender/rendertargets/RenderTargetDepth.cpp
+    XRender/rendertargets/RenderTargetDepth.h
+    XRender/Resource.cpp
+    XRender/Resource.h
+    XRender/shaders/changelist/ChangeList.cpp
+    XRender/shaders/changelist/ChangeList.h
+    XRender/shaders/IncludeHandler.cpp
+    XRender/shaders/IncludeHandler.h
+    XRender/shaders/Shader.cpp
+    XRender/shaders/Shader.h
+    XRender/shaders/ShaderManager.cpp
+    XRender/shaders/ShaderManager.h
+    XRender/shaders/ShaderVar.cpp
+    XRender/shaders/ShaderVar.h
+    XRender/shaders/statefilter/StateFilter.cpp
+    XRender/shaders/statefilter/StateFilter.h
+    XRender/textures/BaseTexture.cpp
+    XRender/textures/BaseTexture.h
+    XRender/textures/Texture.cpp
+    XRender/textures/Texture.h
+    XRender/TXX.h
+    XRender/TXXLoader.cpp
+    XRender/TXXLoader.h
+    XRender/VariablesDB.cpp
+    XRender/VariablesDB.h
+    XRender/vertexbuffers/VBuffer.cpp
+    XRender/vertexbuffers/VBuffer.h
+    XRender/VideoCodec/DShowTextures.cpp
+    XRender/VideoCodec/DShowTextures.h
+    XRender/VideoCodec/sdk_baseclasses/amextra.h
+    XRender/VideoCodec/sdk_baseclasses/amfilter.h
+    XRender/VideoCodec/sdk_baseclasses/amvideo.h
+    XRender/VideoCodec/sdk_baseclasses/audevcod.h
+    XRender/VideoCodec/sdk_baseclasses/cache.h
+    XRender/VideoCodec/sdk_baseclasses/combase.h
+    XRender/VideoCodec/sdk_baseclasses/comlite.h
+    XRender/VideoCodec/sdk_baseclasses/cprop.h
+    XRender/VideoCodec/sdk_baseclasses/ctlutil.h
+    XRender/VideoCodec/sdk_baseclasses/dllsetup.h
+    XRender/VideoCodec/sdk_baseclasses/dsschedule.h
+    XRender/VideoCodec/sdk_baseclasses/edevdefs.h
+    XRender/VideoCodec/sdk_baseclasses/errors.h
+    XRender/VideoCodec/sdk_baseclasses/evcode.h
+    XRender/VideoCodec/sdk_baseclasses/fourcc.h
+    XRender/VideoCodec/sdk_baseclasses/measure.h
+    XRender/VideoCodec/sdk_baseclasses/msgthrd.h
+    XRender/VideoCodec/sdk_baseclasses/mtype.h
+    XRender/VideoCodec/sdk_baseclasses/outputq.h
+    XRender/VideoCodec/sdk_baseclasses/pstream.h
+    XRender/VideoCodec/sdk_baseclasses/refclock.h
+    XRender/VideoCodec/sdk_baseclasses/reftime.h
+    XRender/VideoCodec/sdk_baseclasses/renbase.h
+    XRender/VideoCodec/sdk_baseclasses/source.h
+    XRender/VideoCodec/sdk_baseclasses/streams.h
+    XRender/VideoCodec/sdk_baseclasses/strmctl.h
+    XRender/VideoCodec/sdk_baseclasses/sysclock.h
+    XRender/VideoCodec/sdk_baseclasses/transfrm.h
+    XRender/VideoCodec/sdk_baseclasses/transip.h
+    XRender/VideoCodec/sdk_baseclasses/vfwmsgs.h
+    XRender/VideoCodec/sdk_baseclasses/videoctl.h
+    XRender/VideoCodec/sdk_baseclasses/vtrans.h
+    XRender/VideoCodec/sdk_baseclasses/winctrl.h
+    XRender/VideoCodec/sdk_baseclasses/winutil.h
+    XRender/VideoCodec/sdk_baseclasses/wxdebug.h
+    XRender/VideoCodec/sdk_baseclasses/wxlist.h
+    XRender/VideoCodec/sdk_baseclasses/wxutil.h
+    XRender/VideoCodec/wmvcodec.cpp
+    XRender/VideoCodec/wmvcodec.h
+    XRender/VideoCodec/wmvgraph.cpp
+    XRender/VideoCodec/wmvgraph.h
+    XRender/VideoCodec/wmvinterfaces.h
+    XRender/VideoCodec/xmvcodec.cpp
+    XRender/VideoCodec/xmvcodec.h
+    # XRender/X360TexConvertor.cpp
+    # XRender/X360TexConvertor.h
+    XRender/xliveshower/IXLiveShower.h
+    XRender/xliveshower/XLiveShowerPC.cpp
+    XRender/xliveshower/XLiveShowerPC.h
+    ${CMAKE_SOURCE_DIR}/common_h/compression/Compressor.cpp
+    ${CMAKE_SOURCE_DIR}/common_h/compression/Compressor.h
+    ${CMAKE_SOURCE_DIR}/common_h/compression/XCompressor.cpp
+    ${CMAKE_SOURCE_DIR}/common_h/compression/XCompressor.h
+)
+
+set_target_properties(Systems PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/modules
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/modules
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/modules
+)
+
+target_include_directories(Systems
+    PRIVATE
+    BEFORE ${CMAKE_SOURCE_DIR}/ThirdParty/D3D9/Include
+)
+
+target_link_directories(Systems
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    BEFORE ${CMAKE_SOURCE_DIR}/ThirdParty/D3D9/Lib/x86
+)
+
+target_link_libraries(Systems
+    PRIVATE
+    optimized d3d9
+    debug d3d9d
+    optimized d3dx9
+    debug d3dx9d
+    legacy_stdio_definitions
+    optimized atls
+    debug atls
+)
+
+if(MSVC)
+    target_compile_options(Systems PRIVATE /wd4091)
+endif()
+
+target_compile_options(Systems PRIVATE /Zc:forScope-)
