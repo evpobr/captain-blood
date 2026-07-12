@@ -1,5 +1,7 @@
 project(Systems)
 
+find_program(FXC_EXECUTABLE fxc.exe HINTS ${CMAKE_SOURCE_DIR}/ThirdParty/D3D9/Bin)
+
 add_library(Systems SHARED
     AnimationService/Animation.cpp
     AnimationService/Animation.h
@@ -323,3 +325,149 @@ if(MSVC)
 endif()
 
 target_compile_options(Systems PRIVATE /Zc:forScope-)
+
+set(SHADER_SOURCES
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/arcadesea/Sail.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/arcadesea/ShipsBatching.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/arcadesea/TargetPoints.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/bloodstains/BloodStains.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/bonus/bonus.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Camera/BloodPuff.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/circularbar.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/damageeffect/DamageEffect.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Debug/dbgInfoSprite.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Debug/dbgLine.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Debug/dbgRects.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Debug/dbgSolidBox.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Debug/dbgSphere.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Debug/Physics.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Debug/stdPolygon.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Editor/AnxEditor.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Editor/GridLine.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Editor/LineNoZ.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/editorfont.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/editoroccluder.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/edramrestore.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/FlatSea/FlatSea.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/fly/Fly.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/font.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Background.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/showbatches.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/ShowBiNormals.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/showdiffuse.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/showgloss.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/showLightcomplex.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/shownormalmap.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/ShowNormals.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/showocclusion.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/ShowOverDraw.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/showparralax.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/showshinines.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Debug/ShowTangents.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Decal.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/dummy.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/DynamicLight.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/foam.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/foliage.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Grass.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/LightMap.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/Overlay.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/shaders.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/singletexture.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/VolumetricRays.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/Shaders/WeaponSFX.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/GUI/GUI_Base.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/GUI/GUI_Quad.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/GUI/GUI_Selected.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/GUI/GUI_Sprite.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gui_font.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/histogram/histogram.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/interface/interface.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/interface/taskpointer.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/localeffect/Cloud.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/localeffect/Grass2.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/localeffect/LocalEffect.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/mobjects/BulletTrace.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/mobjects/camerafrustum.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/mobjects/detectors.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/mobjects/Flare.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/mobjects/Lights.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/mobjects/ShooterTrace.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Ocean/Ocean.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Ocean/Ocean3.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Ocean/Skydome.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Ocean/SkyFog.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Particles/Types/Particles.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostEffects/DOF.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostEffects/gaussblur.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostEffects/glow.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostEffects/glowobjects.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostEffects/RadialBlur.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostEffects/Sharpness.fx
+    # ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostProcess/black/black.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostProcess/FillScreen.fx
+    # ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostProcess/glow/glow.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostProcess/Line.fx
+    # ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostProcess/motion/motion.fx
+    # ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostProcess/sharp/sharp.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostProcess/splash/splash.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/ragdoll/ragdoll.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/rain/rain.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/shadows_pssm/Blur/Blur.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/shadows_pssm/MultiTex/pssm_mt_cast.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/shadows_pssm/MultiTex/pssm_mt_recv.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/shadows_pssm/Projected/pssm_proj.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/shadows_pssm/Projected/pssm_proj_cast.fx
+    # ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/shadows_pssm/SingleTex/pssm_st_cast.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/shadows_pssm/SingleTex/pssm_st_recv.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/shadows_pssm/zpass.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/SUN/bb_structs.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/taskviewer.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/trail/Trail.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/video.fx
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/WaterTracks/SeaTrack.fx
+)
+
+# Базовая папка для поиска инклудов компилятором
+set(BASE_SHADERS_SRC_DIR "${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders")
+
+# Находим все .fx файлы автоматически (как в ShaderManager::Compile)
+file(GLOB_RECURSE FX_FILES "${BASE_SHADERS_SRC_DIR}/*.fx")
+file(GLOB_RECURSE FXH_FILES "${BASE_SHADERS_SRC_DIR}/*.fxh" "${BASE_SHADERS_SRC_DIR}/*.h")
+
+# Копируем .fx и .h файлы в папку Build\modules\Shaders
+# Игра ищет шейдеры в modules\Shaders (относительно рабочей директории)
+# При запуске из Build\ путь modules\Shaders = Build\modules\Shaders\
+set(DEST_ROOT "${CMAKE_BINARY_DIR}/../Build/modules")
+foreach(FX_FILE ${FX_FILES})
+    file(RELATIVE_PATH REL_PATH "${BASE_SHADERS_SRC_DIR}" "${FX_FILE}")
+    set(DEST_FILE "${DEST_ROOT}/Shaders/${REL_PATH}")
+    get_filename_component(DEST_DIR "${DEST_FILE}" DIRECTORY)
+    
+    add_custom_command(
+        OUTPUT "${DEST_FILE}"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${DEST_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FX_FILE}" "${DEST_FILE}"
+        DEPENDS "${FX_FILE}"
+        COMMENT "Copying shader: ${REL_PATH}"
+    )
+    list(APPEND FX_FILES_DEST "${DEST_FILE}")
+endforeach()
+
+foreach(FXH_FILE ${FXH_FILES})
+    file(RELATIVE_PATH REL_PATH "${BASE_SHADERS_SRC_DIR}" "${FXH_FILE}")
+    set(DEST_FILE "${DEST_ROOT}/Shaders/${REL_PATH}")
+    get_filename_component(DEST_DIR "${DEST_FILE}" DIRECTORY)
+    
+    add_custom_command(
+        OUTPUT "${DEST_FILE}"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${DEST_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FXH_FILE}" "${DEST_FILE}"
+        DEPENDS "${FXH_FILE}"
+        COMMENT "Copying include: ${REL_PATH}"
+    )
+    list(APPEND FX_FILES_DEST "${DEST_FILE}")
+endforeach()
+
+add_custom_target(CompileShaders DEPENDS ${FX_FILES_DEST})
+add_dependencies(Systems CompileShaders)
