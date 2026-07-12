@@ -41,3 +41,9 @@ add_executable(CaptainBlood WIN32
     sources/test.ini
     sources/resource.rc
 )
+
+set_target_properties(CaptainBlood PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
