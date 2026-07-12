@@ -1,0 +1,110 @@
+project(Particles)
+
+add_library(Particles SHARED
+    datacache/DataCache.cpp
+    datacache/DataCache.h
+    editor/arcball/ArcBall.cpp
+    editor/arcball/ArcBall.h
+    editor/customcontrols/coloredit.cpp
+    editor/customcontrols/coloredit.h
+    editor/customcontrols/gui_grapheditor.cpp
+    editor/customcontrols/gui_grapheditor.h
+    editor/customcontrols/gui_graphline.cpp
+    editor/customcontrols/gui_graphline.h
+    editor/customcontrols/gui_linelist.cpp
+    editor/customcontrols/gui_linelist.h
+    editor/customcontrols/gui_viewport.cpp
+    editor/customcontrols/gui_viewport.h
+    editor/customcontrols/StrUtil.cpp
+    editor/customcontrols/StrUtil.h
+    editor/customcontrols/texturesselector.cpp
+    editor/customcontrols/texturesselector.h
+    editor/customcontrols/texview.cpp
+    editor/customcontrols/texview.h
+    editor/EditorMain.cpp
+    editor/EditorMain.h
+    editor/editors/base.h
+    editor/editors/bool.cpp
+    editor/editors/bool.h
+    editor/editors/color.cpp
+    editor/editors/color.h
+    editor/editors/float.cpp
+    editor/editors/float.h
+    editor/editors/graph.cpp
+    editor/editors/graph.h
+    editor/editors/position.cpp
+    editor/editors/position.h
+    editor/editors/string.cpp
+    editor/editors/string.h
+    editor/editors/uv.cpp
+    editor/editors/uv.h
+    editor/forms/choosename.cpp
+    editor/forms/choosename.h
+    editor/forms/mainwindow.cpp
+    editor/forms/mainwindow.h
+    editor/forms/projectbrowser.cpp
+    editor/forms/projectbrowser.h
+    editor/forms/rename.cpp
+    editor/forms/rename.h
+    editor/forms/systemselect.cpp
+    editor/forms/systemselect.h
+    gizmo/gizmo.cpp
+    gizmo/gizmo.h
+    icommon/BillBoard.h
+    icommon/ColorVertex.h
+    icommon/EditorTypes.h
+    icommon/GraphTime.h
+    icommon/GraphVertex.h
+    icommon/IEmitter.h
+    icommon/MemFile.h
+    icommon/Names.h
+    icommon/Particle.h
+    icommon/Types.h
+    manager/particlemanager.cpp
+    manager/particlemanager.h
+    manager/SyncParams.h
+    service/particleservice.cpp
+    service/particleservice.h
+    system/datadesc/data_desc.cpp
+    system/datadesc/data_desc.h
+    system/datasource/DataBool.cpp
+    system/datasource/DataBool.h
+    system/datasource/DataColor.cpp
+    system/datasource/DataColor.h
+    system/datasource/DataFloat.cpp
+    system/datasource/DataFloat.h
+    system/datasource/DataGraph.cpp
+    system/datasource/DataGraph.h
+    system/datasource/DataPosition.cpp
+    system/datasource/DataPosition.h
+    system/datasource/DataSource.cpp
+    system/datasource/DataSource.h
+    system/datasource/DataString.cpp
+    system/datasource/DataString.h
+    system/datasource/DataUV.cpp
+    system/datasource/DataUV.h
+    system/datasource/FieldList.cpp
+    system/datasource/FieldList.h
+    system/emitters/base.cpp
+    system/emitters/base.h
+    system/emitters/point.cpp
+    system/emitters/point.h
+    system/particleprocessor/bb_processor.cpp
+    system/particleprocessor/bb_processor.h
+    system/particleprocessor/nameparser.h
+    system/particleprocessor/physic.h
+    system/particlesystem/particlesystem.cpp
+    system/particlesystem/particlesystem.h
+    system/particlesystem/SystemProxy.cpp
+    system/particlesystem/SystemProxy.h
+    textfile.h
+)
+
+set_target_properties(Particles PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/modules
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/modules
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/modules
+)
+target_compile_definitions(Particles PRIVATE ENABLE_PARTICLE_THREADS USE_XML_FILE_FORMAT_)
+target_compile_options(Particles PRIVATE /Zc:forScope-)
+target_link_libraries(Particles PRIVATE tinyxml::tinyxml)
