@@ -237,43 +237,6 @@ add_library(Systems SHARED
     XRender/vertexbuffers/VBuffer.h
     XRender/VideoCodec/DShowTextures.cpp
     XRender/VideoCodec/DShowTextures.h
-    XRender/VideoCodec/sdk_baseclasses/amextra.h
-    XRender/VideoCodec/sdk_baseclasses/amfilter.h
-    XRender/VideoCodec/sdk_baseclasses/amvideo.h
-    XRender/VideoCodec/sdk_baseclasses/audevcod.h
-    XRender/VideoCodec/sdk_baseclasses/cache.h
-    XRender/VideoCodec/sdk_baseclasses/combase.h
-    XRender/VideoCodec/sdk_baseclasses/comlite.h
-    XRender/VideoCodec/sdk_baseclasses/cprop.h
-    XRender/VideoCodec/sdk_baseclasses/ctlutil.h
-    XRender/VideoCodec/sdk_baseclasses/dllsetup.h
-    XRender/VideoCodec/sdk_baseclasses/dsschedule.h
-    XRender/VideoCodec/sdk_baseclasses/edevdefs.h
-    XRender/VideoCodec/sdk_baseclasses/errors.h
-    XRender/VideoCodec/sdk_baseclasses/evcode.h
-    XRender/VideoCodec/sdk_baseclasses/fourcc.h
-    XRender/VideoCodec/sdk_baseclasses/measure.h
-    XRender/VideoCodec/sdk_baseclasses/msgthrd.h
-    XRender/VideoCodec/sdk_baseclasses/mtype.h
-    XRender/VideoCodec/sdk_baseclasses/outputq.h
-    XRender/VideoCodec/sdk_baseclasses/pstream.h
-    XRender/VideoCodec/sdk_baseclasses/refclock.h
-    XRender/VideoCodec/sdk_baseclasses/reftime.h
-    XRender/VideoCodec/sdk_baseclasses/renbase.h
-    XRender/VideoCodec/sdk_baseclasses/source.h
-    XRender/VideoCodec/sdk_baseclasses/streams.h
-    XRender/VideoCodec/sdk_baseclasses/strmctl.h
-    XRender/VideoCodec/sdk_baseclasses/sysclock.h
-    XRender/VideoCodec/sdk_baseclasses/transfrm.h
-    XRender/VideoCodec/sdk_baseclasses/transip.h
-    XRender/VideoCodec/sdk_baseclasses/vfwmsgs.h
-    XRender/VideoCodec/sdk_baseclasses/videoctl.h
-    XRender/VideoCodec/sdk_baseclasses/vtrans.h
-    XRender/VideoCodec/sdk_baseclasses/winctrl.h
-    XRender/VideoCodec/sdk_baseclasses/winutil.h
-    XRender/VideoCodec/sdk_baseclasses/wxdebug.h
-    XRender/VideoCodec/sdk_baseclasses/wxlist.h
-    XRender/VideoCodec/sdk_baseclasses/wxutil.h
     XRender/VideoCodec/wmvcodec.cpp
     XRender/VideoCodec/wmvcodec.h
     XRender/VideoCodec/wmvgraph.cpp
