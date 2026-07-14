@@ -15,6 +15,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
+add_subdirectory(ThirdParty/sdk_baseclasses)
 add_subdirectory(Physics)
 add_subdirectory(ArcadeSea)
 add_subdirectory(common_h/tinyxml)

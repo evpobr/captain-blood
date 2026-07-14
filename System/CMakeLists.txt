@@ -312,13 +312,13 @@ target_link_directories(Systems
 target_link_libraries(Systems
     PRIVATE
     optimized d3d9
-    debug d3d9d
     optimized d3dx9
     debug d3dx9d
     legacy_stdio_definitions
-    optimized atls
-    debug atls
+    strmbase
 )
+
+add_dependencies(Systems strmbase)
 
 if(MSVC)
     target_compile_options(Systems PRIVATE /wd4091)

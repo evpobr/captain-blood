@@ -1,13 +1,10 @@
 #ifndef _XBOX
 
-#ifndef _DEBUG
-#pragma comment(lib, "xrender\\videocodec\\strmbase.lib")
-#else
-#pragma comment(lib, "xrender\\videocodec\\strmbased.lib")
-#endif
 #pragma comment(lib, "winmm.lib")
 
 #include "wmvinterfaces.h"
+
+#include <stdio.h>
 
 __forceinline void * _cdecl operator new(size_t size)
 {

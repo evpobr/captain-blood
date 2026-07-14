@@ -5,7 +5,10 @@
 
 #include <windows.h>
 #include <d3d9types.h>
-#include "Sdk_BaseClasses\streams.h"
+#ifndef __STREAMS_H__
+#define __STREAMS_H__
+#include <streams.h>
+#endif
 
 #include "wmvinterfaces.h"
 
