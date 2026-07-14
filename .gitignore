@@ -11,11 +11,7 @@ Final Release
 !ENGINE/modules/Shaders/gmxService/Shaders/Debug
 
 #CMake
-CMakeFiles
-CMakeCache.txt
-cmake-build-debug
-cmake-build-release
-out
+*[Bb]uild*/
 
 # Compiled Object files
 #*.slo
@@ -33,5 +29,3 @@ out
 #*.a
 #*.lib
 ENGINE/modules/Win32Shaders30.fxo
-Build/Temp
-Build/modules
