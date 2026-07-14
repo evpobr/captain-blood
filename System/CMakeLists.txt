@@ -289,7 +289,7 @@ endif()
 
 target_compile_options(Systems PRIVATE /Zc:forScope-)
 
-set(SHADER_SOURCES
+set(FX_FILES
     ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/arcadesea/Sail.fx
     ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/arcadesea/ShipsBatching.fx
     ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/arcadesea/TargetPoints.fx
@@ -395,8 +395,28 @@ set(SHADER_SOURCES
 set(BASE_SHADERS_SRC_DIR "${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders")
 
 # Находим все .fx файлы автоматически (как в ShaderManager::Compile)
-file(GLOB_RECURSE FX_FILES "${BASE_SHADERS_SRC_DIR}/*.fx")
-file(GLOB_RECURSE FXH_FILES "${BASE_SHADERS_SRC_DIR}/*.fxh" "${BASE_SHADERS_SRC_DIR}/*.h")
+set(FXH_FILES 
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostEffects/common.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/PostProcess/common.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/functions.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/gmx_Pack.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/gmx_Structs.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/gmx_UberGenerator.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/gmx_UberShader.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/gmx_Variables.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/gmx_VertexShader.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/gmxService/gmx_VertexShaderAnim.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/GUI/GUI_Common.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Ocean/Ocean.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Particles/ParticlesCommon.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Particles/ParticlesPixelShader.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Particles/ParticlesStruct.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Particles/ParticlesVertexShader.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/shadows_pssm/pssm_vars.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/Shadows/shd_Variables.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/stdvariables.h
+    ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/technique.h
+)
 
 # Копируем .fx и .h файлы в папку Build\modules\Shaders
 # Игра ищет шейдеры в modules\Shaders (относительно рабочей директории)
