@@ -3,7 +3,11 @@
 #include "..\..\Render.h"
 #include "..\..\Defaultstates\DefaultStates.h"
 
+#include <initguid.h>
 
+// {79AAB587-6DBC-4fa7-82DE-37FA1781C5CE}
+DEFINE_GUID(IID_ID3DXEffectStateManager, 
+0x79aab587, 0x6dbc, 0x4fa7, 0x82, 0xde, 0x37, 0xfa, 0x17, 0x81, 0xc5, 0xce);
 
 FXChangeList::FXChangeList(array<RenderState>& changedStates, array<dword>& changedWraps) : m_changedStates(changedStates),
                                                                                             m_changedWraps(changedWraps)

@@ -261,33 +261,26 @@ set_target_properties(Systems PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/modules
 )
 
-target_include_directories(Systems
-    PRIVATE
-    BEFORE ${CMAKE_SOURCE_DIR}/ThirdParty/D3D9/Include
-)
-
 target_link_directories(Systems
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
-    BEFORE ${CMAKE_SOURCE_DIR}/ThirdParty/D3D9/Lib/x86
 )
 
 target_link_libraries(Systems
     PRIVATE
-    optimized d3d9
-    optimized d3dx9
-    debug d3dx9d
+    d3d9
+    Microsoft::D3DX9
     legacy_stdio_definitions
     strmbase
+    atls
 )
-
-add_dependencies(Systems strmbase)
 
 if(MSVC)
     target_compile_options(Systems PRIVATE /wd4091)
 endif()
 
 target_compile_options(Systems PRIVATE /Zc:forScope-)
+target_compile_definitions(Systems PRIVATE _USRDLL)
 
 set(FX_FILES
     ${CMAKE_SOURCE_DIR}/ENGINE/modules/Shaders/arcadesea/Sail.fx
